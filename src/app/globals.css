@@ -1,26 +1,263 @@
 @import "tailwindcss";
 
 :root {
-  --background: #ffffff;
-  --foreground: #171717;
+  --bg-primary: #0a0a0a;
+  --bg-secondary: #141414;
+  --bg-tertiary: #1a1a1a;
+  --bg-card: #161616;
+  --bg-hover: #1e1e1e;
+  --bg-elevated: #1c1c1c;
+  --border-color: #262626;
+  --border-subtle: #1f1f1f;
+  --accent: #e50914;
+  --accent-hover: #ff1a25;
+  --accent-glow: rgba(229, 9, 20, 0.15);
+  --text-primary: #ffffff;
+  --text-secondary: #a0a0a0;
+  --text-muted: #666666;
+  --text-dim: #444444;
+  --success: #22c55e;
+  --warning: #f59e0b;
+  --info: #3b82f6;
 }
 
 @theme inline {
-  --color-background: var(--background);
-  --color-foreground: var(--foreground);
+  --color-background: var(--bg-primary);
+  --color-foreground: var(--text-primary);
   --font-sans: var(--font-geist-sans);
   --font-mono: var(--font-geist-mono);
+  --color-accent: var(--accent);
+  --color-accent-hover: var(--accent-hover);
 }
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
-  }
+* {
+  scrollbar-width: thin;
+  scrollbar-color: #262626 transparent;
+}
+
+*::-webkit-scrollbar {
+  width: 6px;
+}
+
+*::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+*::-webkit-scrollbar-thumb {
+  background: #262626;
+  border-radius: 3px;
+}
+
+*::-webkit-scrollbar-thumb:hover {
+  background: #333;
 }
 
 body {
-  background: var(--background);
-  color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+  background: var(--bg-primary);
+  color: var(--text-primary);
+  font-family: var(--font-geist-sans, system-ui, -apple-system, sans-serif);
+  overflow-x: hidden;
+}
+
+/* Smooth transitions for interactive elements */
+a, button {
+  transition: all 0.15s ease;
+}
+
+/* Glass effect utility */
+.glass {
+  background: rgba(20, 20, 20, 0.8);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  border: 1px solid rgba(255, 255, 255, 0.05);
+}
+
+.glass-light {
+  background: rgba(30, 30, 30, 0.6);
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+}
+
+/* Glow effects */
+.glow-red {
+  box-shadow: 0 0 20px rgba(229, 9, 20, 0.2);
+}
+
+.glow-red-sm {
+  box-shadow: 0 0 10px rgba(229, 9, 20, 0.15);
+}
+
+.text-glow-red {
+  text-shadow: 0 0 20px rgba(229, 9, 20, 0.3);
+}
+
+/* Card hover effect */
+.card-hover {
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.card-hover:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 8px 25px rgba(0, 0, 0, 0.4);
+}
+
+/* Shimmer loading effect */
+@keyframes shimmer {
+  0% { background-position: -200% 0; }
+  100% { background-position: 200% 0; }
+}
+
+.skeleton {
+  background: linear-gradient(90deg, #1a1a1a 25%, #262626 50%, #1a1a1a 75%);
+  background-size: 200% 100%;
+  animation: shimmer 1.5s infinite;
+  border-radius: 8px;
+}
+
+/* Fade in animation */
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(10px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+.animate-fade-in {
+  animation: fadeIn 0.3s ease forwards;
+}
+
+/* Slide up animation */
+@keyframes slideUp {
+  from { opacity: 0; transform: translateY(20px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+.animate-slide-up {
+  animation: slideUp 0.3s ease forwards;
+}
+
+/* Pulse glow for notifications */
+@keyframes pulseGlow {
+  0%, 100% { box-shadow: 0 0 0 0 rgba(229, 9, 20, 0.4); }
+  50% { box-shadow: 0 0 0 8px rgba(229, 9, 20, 0); }
+}
+
+.animate-pulse-glow {
+  animation: pulseGlow 2s infinite;
+}
+
+/* Status indicator animation */
+@keyframes statusPulse {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0.5; }
+}
+
+.animate-status {
+  animation: statusPulse 2s ease-in-out infinite;
+}
+
+/* Horizontal scroll for content rows */
+.scroll-row {
+  display: flex;
+  gap: 16px;
+  overflow-x: auto;
+  scroll-snap-type: x mandatory;
+  scrollbar-width: none;
+  -ms-overflow-style: none;
+  padding-bottom: 8px;
+}
+
+.scroll-row::-webkit-scrollbar {
+  display: none;
+}
+
+.scroll-row > * {
+  scroll-snap-align: start;
+  flex-shrink: 0;
+}
+
+/* Gradient overlays */
+.gradient-fade-bottom {
+  background: linear-gradient(to top, var(--bg-primary), transparent);
+}
+
+.gradient-fade-top {
+  background: linear-gradient(to bottom, var(--bg-primary), transparent);
+}
+
+/* Red accent underline */
+.accent-underline {
+  position: relative;
+}
+
+.accent-underline::after {
+  content: '';
+  position: absolute;
+  bottom: -2px;
+  left: 0;
+  width: 100%;
+  height: 2px;
+  background: var(--accent);
+  border-radius: 1px;
+  transform: scaleX(0);
+  transition: transform 0.2s ease;
+}
+
+.accent-underline:hover::after,
+.accent-underline.active::after {
+  transform: scaleX(1);
+}
+
+/* Prevent layout shift */
+.min-h-screen {
+  min-height: 100vh;
+  min-height: 100dvh;
+}
+
+/* Custom focus ring */
+*:focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: 2px;
+}
+
+/* iOS safe area support */
+.safe-area-bottom {
+  padding-bottom: env(safe-area-inset-bottom, 0px);
+}
+
+/* Story progress bar animation */
+@keyframes storyProgress {
+  from { width: 0%; }
+  to { width: 100%; }
+}
+
+.animate-story-progress {
+  animation: storyProgress 5s linear forwards;
+}
+
+/* Hide scrollbar utility */
+.scrollbar-hide::-webkit-scrollbar {
+  display: none;
+}
+.scrollbar-hide {
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+}
+
+/* Fullscreen story viewer support */
+html, body {
+  height: 100%;
+  overflow-x: hidden;
+}
+
+/* Mobile viewport height fix */
+@supports (height: 100dvh) {
+  .story-fullscreen {
+    height: 100dvh;
+  }
+}
+
+/* Prevent rubber-band scrolling on iOS when story is open */
+body.story-open {
+  position: fixed;
+  width: 100%;
+  overflow: hidden;
 }

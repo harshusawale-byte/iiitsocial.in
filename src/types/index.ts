@@ -8,7 +8,7 @@ export type AcademicYear = '1st Year' | '2nd Year' | '3rd Year' | '4th Year' | '
 export type PlatformStatus = 'NOVA' | 'CORE' | 'PRIME' | 'LEGACY';
 export type PostType = 'text' | 'image' | 'video' | 'poll' | 'discussion' | 'anonymous' | 'blog' | 'event' | 'repost';
 export type DiscussionType = 'SHORT_OPINION' | 'QUESTION' | 'DISCUSSION' | 'POLL' | 'ADVICE' | 'BLOG' | 'ANONYMOUS';
-export type CreateType = 'post' | 'video' | 'discussion' | 'blog' | 'poll' | 'anonymous' | 'event';
+export type CreateType = 'post' | 'video' | 'discussion' | 'blog' | 'poll' | 'anonymous' | 'event' | 'story' | 'reel';
 export type NotificationType = 'like' | 'comment' | 'follow' | 'connection' | 'mention' | 'trending' | 'community' | 'event' | 'message' | 'moderation';
 export type ReportReason = 'spam' | 'harassment' | 'inappropriate' | 'misinformation' | 'other';
 export type ReportStatus = 'pending' | 'reviewed' | 'resolved' | 'dismissed';
@@ -247,12 +247,75 @@ export interface Video {
   createdAt: string;
 }
 
+export interface Story {
+  id: string;
+  authorId: string;
+  content: string;
+  imageUrl?: string;
+  videoUrl?: string;
+  backgroundColor?: string;
+  viewers: string[];
+  createdAt: string;
+  expiresAt: string;
+}
+
+export interface Reel {
+  id: string;
+  authorId: string;
+  videoUrl: string;
+  thumbnailUrl?: string;
+  caption: string;
+  hashtags?: string[];
+  duration: number;
+  likes: string[];
+  comments: Comment[];
+  shares: number;
+  saves: string[];
+  views: number;
+  createdAt: string;
+}
+
 export interface TrendingTopic {
   id: string;
   tag: string;
   postCount: number;
   engagementScore: number;
   isRising: boolean;
+}
+
+// ─── Email System Types ─────────────────────────────────────────────────────
+
+export type EmailDeliveryStatus = 'SENT' | 'FAILED' | 'BOUNCED';
+
+export type EmailEventType =
+  | 'ACCOUNT_CREATED'
+  | 'LOGIN_ALERT'
+  | 'DEVELOPER_ACCESS_APPROVED'
+  | 'DEVELOPER_ACCESS_REJECTED'
+  | 'DEVELOPER_ACCESS_REVOKED'
+  | 'ACCOUNT_CHANGED'
+  | 'PASSWORD_CHANGED'
+  | 'EMAIL_CHANGED';
+
+export interface EmailLog {
+  id: string;
+  to: string;
+  eventType: EmailEventType;
+  subject: string;
+  status: EmailDeliveryStatus;
+  providerMessageId?: string;
+  errorMessage?: string;
+  createdAt: string;
+  sentAt?: string;
+}
+
+export interface EmailPreferences {
+  userId: string;
+  accountSecurity: boolean;      // login alerts, password changes
+  accountActivity: boolean;      // developer access events
+  securityChanges: boolean;      // email changed, account changed
+  marketingTips: boolean;        // tips, feature updates (off by default)
+  updatedAt: string;
 }
 
 export interface AppState {
@@ -270,6 +333,8 @@ export interface AppState {
   notifications: Notification[];
   reports: Report[];
   moderationLogs: ModerationLog[];
+  stories: Story[];
+  reels: Reel[];
   videos: Video[];
   trendingTopics: TrendingTopic[];
   isOnboarded: boolean;
@@ -277,4 +342,6 @@ export interface AppState {
   activePage: string;
   createModalOpen: boolean;
   createModalType: CreateType | null;
+  storyViewerOpen: boolean;
+  storyViewerAuthorId: string | null;
 }
