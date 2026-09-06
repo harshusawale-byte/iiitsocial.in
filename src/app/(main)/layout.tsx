@@ -45,6 +45,7 @@ export default function MainLayout({ children }: { children: React.ReactNode }) 
     if (pathname === '/explore') return 'Explore';
     if (pathname === '/discuss') return 'Discuss';
     if (pathname === '/people') return 'People';
+    if (pathname === '/team-finder') return 'Team Finder';
     if (pathname === '/communities') return 'Communities';
     if (pathname === '/messages') return 'Messages';
     if (pathname === '/notifications') return 'Notifications';
