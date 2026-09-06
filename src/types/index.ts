@@ -318,12 +318,54 @@ export interface EmailPreferences {
   updatedAt: string;
 }
 
+// ============================================
+// Opportunity Hub Types
+// ============================================
+
+export type OpportunityCategory = 'internships' | 'hackathons' | 'scholarships' | 'research' | 'competitions' | 'workshops' | 'other';
+export type OpportunityApplicationMethod = 'external' | 'internal';
+export type OpportunityStatus = 'active' | 'closed' | 'draft';
+export type OpportunityApplicationStatus = 'pending' | 'reviewing' | 'accepted' | 'rejected';
+
+export interface Opportunity {
+  id: string;
+  title: string;
+  description: string;
+  category: OpportunityCategory;
+  organizer: string;
+  eligibility: string | null;
+  required_skills: string[];
+  deadline: string | null;
+  location: string | null;
+  application_method: OpportunityApplicationMethod;
+  application_url: string | null;
+  created_by: string;
+  status: OpportunityStatus;
+  created_at: string;
+  updated_at: string;
+}
+
+export interface OpportunityApplication {
+  id: string;
+  opportunity_id: string;
+  applicant_id: string;
+  message: string | null;
+  status: OpportunityApplicationStatus;
+  created_at: string;
+  updated_at: string;
+}
+
+export interface SavedOpportunity {
+  user_id: string;
+  opportunity_id: string;
+  created_at: string;
+}
+
 export interface AppState {
   currentUser: User | null;
   users: User[];
   posts: Post[];
   discussions: Discussion[];
-  blogs: Blog[];
   polls: Poll[];
   communities: Community[];
   clubs: Club[];
@@ -334,7 +376,6 @@ export interface AppState {
   reports: Report[];
   moderationLogs: ModerationLog[];
   stories: Story[];
-  reels: Reel[];
   videos: Video[];
   trendingTopics: TrendingTopic[];
   isOnboarded: boolean;
@@ -344,4 +385,5 @@ export interface AppState {
   createModalType: CreateType | null;
   storyViewerOpen: boolean;
   storyViewerAuthorId: string | null;
+  savedPostIds: string[];
 }
