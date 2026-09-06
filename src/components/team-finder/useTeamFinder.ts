@@ -33,7 +33,7 @@ async function fetchTeamFinderProfiles(): Promise<TeamFinderProfileWithUser[]> {
     return {
       ...p,
       user_name: (u?.name as string) || 'Unknown',
-      user_username: (u?.username as string) || 'unknown',
+      user_username: (u?.username as string) || '',
       user_avatar: (u?.avatar as string) || '',
       user_bio: (u?.bio as string) || null,
       user_branch: (u?.branch as string) || 'CSE',
@@ -105,7 +105,7 @@ async function fetchTeamRequests(userId: string): Promise<{ incoming: RequestWit
     return {
       ...r,
       other_user_name: (u?.name as string) || 'Unknown',
-      other_user_username: (u?.username as string) || 'unknown',
+      other_user_username: (u?.username as string) || '',
       other_user_avatar: (u?.avatar as string) || '',
       other_user_branch: (u?.branch as string) || '',
       other_user_academic_year: (u?.academic_year as string) || '',

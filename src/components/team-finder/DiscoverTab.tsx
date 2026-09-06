@@ -43,7 +43,7 @@ export default function DiscoverTab({
         const q = search.toLowerCase();
         return (
           p.user_name.toLowerCase().includes(q) ||
-          p.user_username.toLowerCase().includes(q) ||
+          (p.user_username && p.user_username.toLowerCase().includes(q)) ||
           (p.project_title && p.project_title.toLowerCase().includes(q)) ||
           (p.project_description && p.project_description.toLowerCase().includes(q)) ||
           p.required_skills.some(s => s.toLowerCase().includes(q)) ||
@@ -163,7 +163,7 @@ export default function DiscoverTab({
                     <button onClick={() => router.push(`/profile?userId=${p.id}`)} className="text-white font-semibold text-sm hover:underline text-left">{p.user_name}</button>
                     {p.user_is_verified && <VerifiedBadge />}
                   </div>
-                  <p className="text-[#666] text-xs mt-0.5">{p.user_branch} · {p.user_academic_year} · @{p.user_username}</p>
+                  <p className="text-[#666] text-xs mt-0.5">{p.user_branch} · {p.user_academic_year}{p.user_username ? ` · @${p.user_username}` : ''}</p>
                 </div>
               </div>
 

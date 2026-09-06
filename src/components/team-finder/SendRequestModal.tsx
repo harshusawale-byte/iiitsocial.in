@@ -83,7 +83,7 @@ export default function SendRequestModal({
           />
           <div>
             <p className="text-white text-sm font-medium">{targetUser.user_name}</p>
-            <p className="text-[#666] text-xs">@{targetUser.user_username}</p>
+            {targetUser.user_username && <p className="text-[#666] text-xs">@{targetUser.user_username}</p>}
           </div>
         </div>
 
