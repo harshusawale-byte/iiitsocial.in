@@ -37,13 +37,25 @@ export default function EditProfileModal({ onClose }: EditProfileModalProps) {
   const avatarInputRef = useRef<HTMLInputElement>(null);
   const coverInputRef = useRef<HTMLInputElement>(null);
 
+  // Username validation
+  const normalizedUsername = username.trim().toLowerCase().replace(/[^a-z0-9_]/g, '');
+  const usernameChanged = normalizedUsername !== (state.currentUser?.username || '');
+  const usernameError = normalizedUsername.length === 0
+    ? 'Username is required'
+    : normalizedUsername.length < 3 && usernameChanged
+      ? 'Username must be at least 3 characters'
+      : normalizedUsername.length > 20
+        ? 'Username must be 20 characters or less'
+        : null;
+  const isUsernameValid = !usernameError;
+
   if (!state.currentUser) return null;
 
   const handleClose = () => {
     onClose();
   };
 
-  const handleSave = () => {
+  const handleSave = async () => {
     if (!name.trim()) return;
     setSaving(true);
 
@@ -60,11 +72,14 @@ export default function EditProfileModal({ onClose }: EditProfileModalProps) {
       coverImage: coverPreview || undefined,
     };
 
+    // Persist to Supabase
+    const { updateProfile } = await import('../../lib/supabase/auth');
+    await updateProfile(state.currentUser!.id, updates);
+
+    // Update local state
     dispatch({ type: 'UPDATE_USER', userId: state.currentUser!.id, updates });
-    setTimeout(() => {
-      setSaving(false);
-      onClose();
-    }, 300);
+    setSaving(false);
+    onClose();
   };
 
   const toggleInterest = (interest: string) => {
@@ -214,11 +229,13 @@ export default function EditProfileModal({ onClose }: EditProfileModalProps) {
               <span className="text-[#444] text-sm">@</span>
               <input
                 value={username}
-                onChange={(e) => setUsername(e.target.value)}
+                onChange={(e) => setUsername(e.target.value.toLowerCase().replace(/[^a-z0-9_]/g, ''))}
                 placeholder="username"
+                maxLength={20}
                 className="flex-1 bg-transparent text-white text-sm placeholder-[#444] focus:outline-none ml-1"
               />
             </div>
+            {usernameError && <p className="text-red-400 text-xs mt-1">{usernameError}</p>}
           </div>
 
           {/* Bio */}
@@ -335,7 +352,7 @@ export default function EditProfileModal({ onClose }: EditProfileModalProps) {
           </button>
           <button
             onClick={handleSave}
-            disabled={!name.trim() || saving}
+            disabled={!name.trim() || !isUsernameValid || saving}
             className="px-6 py-2 bg-[#e50914] hover:bg-[#ff1a25] disabled:opacity-30 disabled:cursor-not-allowed text-white text-sm font-semibold rounded-lg transition-all active:scale-95"
           >
             {saving ? (
