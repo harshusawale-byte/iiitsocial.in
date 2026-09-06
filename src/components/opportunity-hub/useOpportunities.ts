@@ -82,6 +82,7 @@ export function useOpportunities() {
   // ─── Loaders ─────────────────────────────────────────────────────────────
 
   const loadOpportunities = useCallback(async () => {
+    if (!userId) return;
     setLoading(true);
     setError(null);
     try {
@@ -90,7 +91,7 @@ export function useOpportunities() {
       setError('Failed to load opportunities. Please try again.');
     }
     setLoading(false);
-  }, []);
+  }, [userId]);
 
   const loadSaved = useCallback(async () => {
     if (!userId) return;
